@@ -1,0 +1,57 @@
+<section>
+    <header>
+        <mat-card class="header">
+            <mat-card-title><img src="/assets/findfood.png" style="width: 110px; height: 20px;"></mat-card-title>
+            <button mat-button [matMenuTriggerFor]="menu" id="cog">
+                <mat-icon>settings</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="newRestaurant()">
+                    <mat-icon>add</mat-icon>
+                    Cadastrar Restaurantes
+                </button>
+                <button mat-menu-item (click)="exit()">
+                    <mat-icon>logout</mat-icon>
+                    Sair
+                </button>
+            </mat-menu>
+        </mat-card>
+    </header>
+
+    <div id="restaurantes">
+        <h1>Restaurantes</h1>
+        <mat-form-field appearance="outline">
+            <mat-label>Busque por uma cidade ou nome do restaurante</mat-label>
+            <input matInput placeholder="Tente 'Jundiaí', ou 'Restaurante da fazenda'" [(ngModel)]="pesquisar"
+                [ngModelOptions]="{standalone: true}">
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <section id="restaurantes-cards">
+            <mat-card *ngFor="let restaurante of restaurantes | restaurante_filter: pesquisar">
+                <mat-card-title>
+                    {{restaurante["nome"]}}
+                </mat-card-title>
+                <mat-card-subtitle>
+                    {{restaurante["descricao"]}}
+                </mat-card-subtitle>
+                <p style="font-size: 10px; text-align: left; font-weight: 600;">
+                    Criado por: {{restaurante["autor_restaurante"]["displayName"]}} em
+                    {{restaurante["criado_em"].seconds * 1000 |
+                    date:
+                    "MMMM d, y,
+                    h:mm:ss a": "IST": "pt"}}
+                </p>
+                <div id="toBottom">
+                    <div>
+                        <mat-icon>location_on</mat-icon>
+                        <p>{{restaurante["cidade"]}}, {{restaurante["estado"]["nome"]}}</p>
+                    </div>
+                    <button mat-flat-button color='primary' (click)="openRestaurant(restaurante)">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                </div>
+            </mat-card>
+        </section>
+    </div>
+</section>
